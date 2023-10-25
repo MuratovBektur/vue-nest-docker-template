@@ -1,0 +1,38 @@
+version: "3.8"
+
+name: vue-nest_dev
+
+services:
+  client:
+    container_name: "vue-nest_client_dev"
+    build:
+      context: ./client
+      dockerfile: Dockerfile_dev
+    expose:
+      - 3000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./client:/app
+  server:
+    container_name: "vue-nest_server_dev"
+    restart: always
+    build:
+      context: server
+      dockerfile: Dockerfile_dev
+    expose:
+      - 5000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./server:/app
+  nginx:
+    image: nginx
+    restart: "no"
+    container_name: "vue-nest_nginx_dev"
+    ports:
+      - 7000:80
+    depends_on:
+      - server
+      - client
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./nginx/dev:/etc/nginx/conf.d
