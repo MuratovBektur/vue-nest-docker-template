@@ -1,10 +1,4 @@
-FROM node:18
-
-ARG WWWGROUP
-# выставляем права чтобы можно 
-# созданные файлы через docker контейнер
-# могли быть изменнены на хосте
-USER $WWWUSER:$WWWUSER
+FROM node:20
 
 WORKDIR /app
 
@@ -15,6 +9,5 @@ RUN yarn install
 RUN yarn global add @nestjs/cli
 
 COPY . .
-RUN chown -R $WWWUSER:$WWWUSER ./node_modules
 
 CMD [ -d "node_modules" ] && yarn dev || yarn install --frozen-lockfile && yarn dev
